@@ -1,3 +1,5 @@
+# https://github.com/upbound/provider-datadog
+# https://doc.crds.dev/github.com/upbound/provider-datadog
 apiVersion: datadog.upbound.io/v1alpha1
 kind: Team
 metadata:
@@ -7,3 +9,30 @@ spec:
     name: jackjack-test-team
     handle: jackjack-test-team-handle
     description: "Hello! This was created with Crossplane"
+---
+# Adapted from https://github.legalzoom.com/engineering/authorization-service-deployment/blob/master/envs/prd/monitoring.yaml
+# but translated into Crossplane-language
+apiVersion: datadog.upbound.io/v1alpha1
+kind: Monitor
+metadata:
+  name: basic-monitor
+spec:
+  forProvider:
+    name: jackjack-example-monitor
+    query: "sum(last_4h):anomalies(sum:authorization.login_success_total{*}.as_count(), 'agile', 3, direction='both', interval=60, alert_window='last_5m', timezone='America/Los_Angeles', count_default_zero='true', seasonality='weekly') >= 1"
+    type: "query alert"
+    message: "@pagerduty-fake_name_to_not_page_anyone"
+    tags:
+      - "sre"
+    priority: null
+    evaluationDelay: 60
+    includeTags: true
+    notifyNoData: true
+    noDataTimeframe: 300
+    renotifyInterval: 0
+    monitorThresholdWindows:
+      - recoveryWindow: last_5m
+        triggerWindow: last_5m
+    monitorThresholds:
+      - critical: "1"
+        criticalRecovery: "0"
