@@ -1,0 +1,9 @@
+apiVersion: datadog.upbound.io/v1alpha1
+kind: Team
+metadata:
+  name: jackjack-test-crossplane-team
+spec:
+  forProvider:
+    name: jackjack-test-team
+    handle: jackjack-test-team-handle
+    description: "Hello! This was created with Crossplane"
