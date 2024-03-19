@@ -36,3 +36,31 @@ spec:
     monitorThresholds:
       - critical: "1"
         criticalRecovery: "0"
+---
+# None listed here: https://github.legalzoom.com/engineering/authorization-service-deployment/blob/master/envs/prd/monitoring.yaml
+# So I pulled from an existing specification here:
+# https://app.datadoghq.com/slo/manage?slo_id=58b620da2be95510a51f828f56011163&tab=status_and_history&from_ts=1708213490360&to_ts=1710805490360&paused=false
+# and changed appropriate values to avoid making folks think this is a "real" SLO
+#
+# (Fetch the base info with:
+# `$ curl -H "DD-APPLICATION-KEY: <...>" -H "DD-API-KEY: <...>" https://api.datadoghq.com/api/v1/slo/58b620da2be95510a51f828f56011163)
+apiVersion: datadog.upbound.io/v1alpha1
+kind: ServiceLevelObjective
+metadata:
+  name: jackjack-basic-slo
+spec:
+  forProvider:
+    name: jackjack-example-slo-for-api-cart-service
+    thresholds:
+      - timeframe: 30d
+        target: 98.0
+        warning: 99.0
+    type: "metric"
+    description: "A copy of SLO ID 58b620da2be95510a51f828f56011163"
+    timeframe: "30d"
+    targetThreshold: 98.0
+    warningThreshold: 99.0
+    query:
+      - denominator: "sum:trace.opentelemetry.server.hits.by_http_status{env:p,service:api-cart-service.api-cart-service-usw2-prd}.as_count()"
+        numerator: "sum:trace.opentelemetry.server.hits.by_http_status{env:p,service:api-cart-service.api-cart-service-usw2-prd}.as_count() - sum:trace.opentelemetry.server.hits.by_http_status{env:p,service:api-cart-service.api-cart-service-usw2-prd,http.status_code:400}.as_count()"
+    
