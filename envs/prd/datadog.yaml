@@ -63,4 +63,184 @@ spec:
     query:
       - denominator: "sum:trace.opentelemetry.server.hits.by_http_status{env:p,service:api-cart-service.api-cart-service-usw2-prd}.as_count()"
         numerator: "sum:trace.opentelemetry.server.hits.by_http_status{env:p,service:api-cart-service.api-cart-service-usw2-prd}.as_count() - sum:trace.opentelemetry.server.hits.by_http_status{env:p,service:api-cart-service.api-cart-service-usw2-prd,http.status_code:400}.as_count()"
-    
+---
+# Taken from ...
+apiVersion: datadog.upbound.io/v1alpha1
+kind: DashboardJSON
+metadata:
+  name: jackjack-basic-dashboard
+spec:
+  forProvider:
+    dashboard: |
+      {
+        "title": "jackjack-basic-dashboard",
+        "description": "",
+        "widgets": [
+            {
+                "id": 7517335659303630,
+                "definition": {
+                    "title": "Log series for Advisor Configuration Service",
+                    "title_size": "16",
+                    "title_align": "left",
+                    "show_legend": true,
+                    "legend_layout": "auto",
+                    "legend_columns": [
+                        "avg",
+                        "min",
+                        "max",
+                        "value",
+                        "sum"
+                    ],
+                    "type": "timeseries",
+                    "requests": [
+                        {
+                            "formulas": [
+                                {
+                                    "formula": "query1"
+                                }
+                            ],
+                            "queries": [
+                                {
+                                    "data_source": "logs",
+                                    "name": "query1",
+                                    "search": {
+                                        "query": "service:AdvisorConfigurationService"
+                                    },
+                                    "indexes": [
+                                        "*"
+                                    ],
+                                    "compute": {
+                                        "aggregation": "count"
+                                    },
+                                    "group_by": [],
+                                    "storage": "hot"
+                                }
+                            ],
+                            "response_format": "timeseries",
+                            "style": {
+                                "palette": "dog_classic",
+                                "line_type": "solid",
+                                "line_width": "normal"
+                            },
+                            "display_type": "line"
+                        }
+                    ]
+                },
+                "layout": {
+                    "x": 0,
+                    "y": 0,
+                    "width": 6,
+                    "height": 4
+                }
+            },
+            {
+                "id": 4998496327427478,
+                "definition": {
+                    "title": "Error for AdvisorConfigurationService",
+                    "title_size": "16",
+                    "title_align": "left",
+                    "show_legend": true,
+                    "legend_layout": "auto",
+                    "legend_columns": [
+                        "avg",
+                        "min",
+                        "max",
+                        "value",
+                        "sum"
+                    ],
+                    "type": "timeseries",
+                    "requests": [
+                        {
+                            "formulas": [
+                                {
+                                    "formula": "query1"
+                                }
+                            ],
+                            "queries": [
+                                {
+                                    "data_source": "events",
+                                    "name": "query1",
+                                    "search": {
+                                        "query": "service:AdvisorConfigurationService status:error"
+                                    },
+                                    "indexes": [
+                                        "*"
+                                    ],
+                                    "compute": {
+                                        "aggregation": "count"
+                                    },
+                                    "group_by": []
+                                }
+                            ],
+                            "response_format": "timeseries",
+                            "style": {
+                                "palette": "dog_classic",
+                                "line_type": "solid",
+                                "line_width": "normal"
+                            },
+                            "display_type": "line"
+                        }
+                    ]
+                },
+                "layout": {
+                    "x": 6,
+                    "y": 0,
+                    "width": 6,
+                    "height": 4
+                }
+            },
+            {
+                "id": 1056546795936528,
+                "definition": {
+                    "title": "Logs",
+                    "title_size": "16",
+                    "title_align": "left",
+                    "requests": [
+                        {
+                            "response_format": "event_list",
+                            "columns": [
+                                {
+                                    "field": "status_line",
+                                    "width": "auto"
+                                },
+                                {
+                                    "field": "timestamp",
+                                    "width": "auto"
+                                },
+                                {
+                                    "field": "host",
+                                    "width": "auto"
+                                },
+                                {
+                                    "field": "service",
+                                    "width": "auto"
+                                },
+                                {
+                                    "field": "content",
+                                    "width": "compact"
+                                }
+                            ],
+                            "query": {
+                                "data_source": "logs_stream",
+                                "query_string": "service:AdvisorConfigurationService",
+                                "indexes": [],
+                                "storage": "hot"
+                            }
+                        }
+                    ],
+                    "type": "list_stream"
+                },
+                "layout": {
+                    "x": 0,
+                    "y": 4,
+                    "width": 12,
+                    "height": 4
+                }
+            }
+        ],
+        "template_variables": [],
+        "layout_type": "ordered",
+        "notify_list": [],
+        "reflow_type": "fixed",
+        "tags": []
+      }
